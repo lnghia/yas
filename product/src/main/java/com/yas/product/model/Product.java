@@ -27,7 +27,7 @@ public class Product {
   private String specification;
 
   @NotEmpty
-  @Pattern(regexp = "^[a-zA-Z0-9_]*$")
+  @Pattern(regexp = "^\\w*$")
   private String sku;
 
   private long gtin;
