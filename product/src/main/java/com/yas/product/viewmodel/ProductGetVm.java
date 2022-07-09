@@ -11,13 +11,8 @@ public record ProductGetVm (
         String description,
         String specification,
         String sku,
-        long gtin,
-        double price,
-        boolean isAllowedToOrder,
-        boolean isPublished,
-        boolean isFeatured,
-        BrandVm brand,
-        List<CategoryGetVm> categories) {
+        String gtin,
+        BrandVm brand) {
 
     public static ProductGetVm fromModel(Product product) {
         return new ProductGetVm(
@@ -28,12 +23,7 @@ public record ProductGetVm (
                 product.getSpecification(),
                 product.getSku(),
                 product.getGtin(),
-                product.getPrice(),
-                product.isAllowedToOrder(),
-                product.isPublished(),
-                product.isFeatured(),
-                BrandVm.fromModel(product.getBrand()),
-                product.getCategories().stream().map(CategoryGetVm::fromModel).toList()
+                BrandVm.fromModel(product.getBrand())
         );
     }
 }
