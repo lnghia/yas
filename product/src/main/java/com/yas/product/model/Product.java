@@ -4,50 +4,60 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
 @Getter
 @Setter
-public class Product {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class Product extends AbstractAuditEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String name;
+    private String name;
 
-  private String shortDescription;
+    private String shortDescription;
 
-  private String description;
+    private String description;
 
-  private String specification;
+    private String specification;
 
-  @NotEmpty
-  @Pattern(regexp = "^\\w*$")
-  private String sku;
+    private String sku;
 
-  private long gtin;
+    private String gtin;
 
-  private double price = 0.0;
+    private String slug;
 
-  private boolean isAllowedToOrder;
+    private String metaKeyword;
 
-  private boolean isPublished;
+    private String metaDescription;
 
-  private boolean isFeatured;
+    private Long thumbnailMediaId;
 
-  @ManyToOne
-  @JoinColumn(name = "brand_id", referencedColumnName = "id")
-  private Brand brand;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
-  @ManyToMany
-  @JoinTable(
-      name = "product_category",
-      joinColumns = {@JoinColumn(name = "product_id", nullable = false, updatable = false)},
-      inverseJoinColumns = {@JoinColumn(name = "category_id", nullable = false, updatable = false)})
-  private Set<Category> categories = new HashSet<>();
+    @OneToMany(mappedBy = "product")
+    private List<ProductCategory> productCategories = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Product)) {
+            return false;
+        }
+        return id != null && id.equals(((Product) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
 }

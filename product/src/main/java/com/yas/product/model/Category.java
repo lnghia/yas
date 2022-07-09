@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name="category")
-public class Category {
+public class Category extends AbstractAuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +37,23 @@ public class Category {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     private List<Category> categories = new ArrayList<>();
 
-    private ZonedDateTime createdOn = ZonedDateTime.now();
+    @OneToMany(mappedBy = "category")
+    private List<ProductCategory> productCategories = new ArrayList<>();
 
-    private String createdBy;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Category)) {
+            return false;
+        }
+        return id != null && id.equals(((Category) o).id);
+    }
 
-    private ZonedDateTime lastModifiedOn = ZonedDateTime.now();
-
-    private String lastModifiedBy;
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
 }
