@@ -10,8 +10,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.yas.product.specification.ProductSpecification.*;
 
 import java.util.List;
 
@@ -55,5 +58,24 @@ public class ProductController {
             .orElseThrow(() -> new NotFoundException(String.format("Product %s is not found", id)));
 
     return ResponseEntity.ok(ProductGetDetailVm.fromModel(product));
+  }
+
+  @GetMapping
+  public ResponseEntity<PageableProductListVm> filterProducts(
+      @RequestBody ProductFilterPostVm requestBody,
+      @RequestParam(defaultValue = "0") Integer page,
+      @RequestParam(defaultValue = "10") Integer size) {
+    Pageable pageable = PageRequest.of(page, size);
+
+    PageableProductListVm result =
+        PageableProductListVm.fromModel(
+            productRepository.findAll(
+                Specification.where(
+                    hasSlugLike(requestBody.slug())
+                        .and(hasBrandId(requestBody.brandId()))
+                        .and(hasCategoryIds(List.of(requestBody.categoryId())))),
+                pageable));
+
+    return ResponseEntity.ok(result);
   }
 }

@@ -2,6 +2,8 @@ package com.yas.product.viewmodel;
 
 import com.yas.product.model.Product;
 
+import java.util.List;
+
 public record ProductGetDetailVm (
         long id,
         String name,
@@ -12,7 +14,8 @@ public record ProductGetDetailVm (
         String specification,
         String sku,
         String gtin,
-        BrandVm brand) {
+        BrandVm brand,
+        List<CategoryGetVm> categories) {
     public static ProductGetDetailVm fromModel(Product product) {
         return new ProductGetDetailVm(
                 product.getId(),
@@ -24,7 +27,8 @@ public record ProductGetDetailVm (
                 product.getSpecification(),
                 product.getSku(),
                 product.getGtin(),
-                BrandVm.fromModel(product.getBrand())
+                BrandVm.fromModel(product.getBrand()),
+                product.getProductCategories().stream().map(CategoryGetVm::fromModel).toList()
         );
     }
 }
