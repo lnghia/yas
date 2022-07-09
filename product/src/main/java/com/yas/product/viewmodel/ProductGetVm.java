@@ -8,10 +8,6 @@ public record ProductGetVm (
         long id,
         String name,
         String shortDescription,
-        String description,
-        String specification,
-        String sku,
-        String gtin,
         BrandVm brand) {
 
     public static ProductGetVm fromModel(Product product) {
@@ -19,10 +15,6 @@ public record ProductGetVm (
                 product.getId(),
                 product.getName(),
                 product.getShortDescription(),
-                product.getDescription(),
-                product.getSpecification(),
-                product.getSku(),
-                product.getGtin(),
                 BrandVm.fromModel(product.getBrand())
         );
     }

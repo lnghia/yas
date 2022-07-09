@@ -42,18 +42,18 @@ public class ProductController {
         @ApiResponse(
             responseCode = "200",
             description = "Ok",
-            content = @Content(schema = @Schema(implementation = ProductGetVm.class))),
+            content = @Content(schema = @Schema(implementation = ProductGetDetailVm.class))),
         @ApiResponse(
             responseCode = "404",
             description = "Not found",
             content = @Content(schema = @Schema(implementation = ErrorVm.class)))
       })
-  public ResponseEntity<ProductGetVm> getById(@PathVariable("id") Long id) {
+  public ResponseEntity<ProductGetDetailVm> getById(@PathVariable("id") Long id) {
     Product product =
         productRepository
             .findById(id)
             .orElseThrow(() -> new NotFoundException(String.format("Product %s is not found", id)));
 
-    return ResponseEntity.ok(ProductGetVm.fromModel(product));
+    return ResponseEntity.ok(ProductGetDetailVm.fromModel(product));
   }
 }
