@@ -1,6 +1,7 @@
 package com.yas.product.viewmodel;
 
 import com.yas.product.model.Product;
+import com.yas.product.model.ProductCategory;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public record ProductGetDetailVm (
                 product.getSku(),
                 product.getGtin(),
                 BrandVm.fromModel(product.getBrand()),
-                product.getProductCategories().stream().map(CategoryGetVm::fromModel).toList()
+                product.getProductCategories().stream().map(ProductCategory::getCategory).map(CategoryGetVm::fromModel).toList()
         );
     }
 }
