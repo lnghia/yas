@@ -1,4 +1,4 @@
-package com.yas.product.configurations;
+package com.yas.product.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +32,6 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/swagger-ui/**");
+        return web -> web.ignoring().antMatchers("/swagger-ui/**");
     }
 }
